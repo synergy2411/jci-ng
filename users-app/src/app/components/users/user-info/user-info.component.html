@@ -1,0 +1,14 @@
+<h3>{{ user.firstName }} {{ user.lastName }}</h3>
+<!-- <p [ngClass]="['my-border', 'my-feature']">Income : {{ user.income }}</p> -->
+<!-- <p [ngClass]="{'my-border' : true, 'my-feature' : false}">Income : {{ user.income }}</p> -->
+<p [ngClass]="dynamicClass" *ngIf="user.isWorking; else elseTemplate">Income : {{ user.income }}
+<button class="btn btn-sm btn-default" (click)="onToggle()">
+  Toggle Class
+</button>
+</p>
+
+<ng-template #elseTemplate>
+  <p>Mr. {{user.lastName}} is not working now!</p>
+</ng-template>
+
+<p [ngStyle] ="dynamicStyle">Date of Birth : <span [innerText]="user.dob"></span></p>
