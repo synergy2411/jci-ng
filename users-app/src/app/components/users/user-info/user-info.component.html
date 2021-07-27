@@ -1,22 +1,36 @@
 
-<h3 appHighlight [favColor] = "'tomato'">{{ user.firstName }} {{ user.lastName }}</h3>
+<h3 appHighlight [favColor] = "'tomato'">
+  {{ user.firstName | uppercase }} {{ user.lastName | uppercase}}</h3>
 
 <!-- <p [ngClass]="['my-border', 'my-feature']">Income : {{ user.income }}</p> -->
 <!-- <p [ngClass]="{'my-border' : true, 'my-feature' : false}">Income : {{ user.income }}</p> -->
-<p [ngClass]="dynamicClass" *ngIf="user.isWorking; else elseTemplate">Income : {{ user.income }}
+<p [ngClass]="dynamicClass" *ngIf="user.isWorking; else elseTemplate">
+  Income : {{ user.income | currency : 'INR' }}
 <button class="btn btn-sm btn-default" (click)="onToggle()">
   Toggle Class
 </button>
 </p>
+
+
+<ng-template #elseTemplate>
+  <p>Mr. {{user.lastName}} is not working now!</p>
+</ng-template>
+
+<p [ngStyle] ="dynamicStyle">
+  Date of Birth : <span [innerText]="user.dob | date : 'dd/MM/yyyy' "></span>
+</p>
+
+
+
 
 <!-- Desugar Syntax -->
 <!-- <ng-template [ngIf]="user.isWorking">
   <p>Income : {{ user.income }}</p>
 </ng-template> -->
 
-<p *appUntil = "user.isWorking">
+<!-- <p *appUntil = "user.isWorking">
   income from until : {{ user.income }}
-</p>
+</p> -->
 
 <!-- <ng-template [appUntil]="user.isWorking">
   <p>Income : {{ user.income }}</p>
@@ -25,9 +39,3 @@
 
 
 
-
-<ng-template #elseTemplate>
-  <p>Mr. {{user.lastName}} is not working now!</p>
-</ng-template>
-
-<p [ngStyle] ="dynamicStyle">Date of Birth : <span [innerText]="user.dob"></span></p>

@@ -1,0 +1,24 @@
+<h2>Promise Value : {{ promise | async | uppercase }} </h2>
+
+<div class="row">
+  <div class="col-6">
+  <select name="todo" [(ngModel)] ="filteredStatus" class="form-control">
+    <option value="done">Done</option>
+    <option value="pending">Pending</option>
+  </select>
+</div>
+<div class="col-6">
+  <button class="btn btn primary btn-block" (click)="onAddNewItem()">
+    Add New Item
+  </button>
+</div>
+</div>
+
+<ul class="list-group">
+  <li *ngFor="let todo of todoCollection | filter : filteredStatus" class="list-group-item">
+    {{ todo.label | uppercase}}
+    <span class="badge badge-dark">
+      {{ todo.status }}
+    </span>
+  </li>
+</ul>

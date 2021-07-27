@@ -1,3 +1,11 @@
+
+
+<!-- {{ users | json }} -->
+
+<h3>Counter in Users : {{ getCounter() }}</h3>
+<button (click)="increment()">Increase</button>
+
+
 <ul class="list-group">
   <li class="list-group-item" *ngFor="let user of users">
     <div class="row">
