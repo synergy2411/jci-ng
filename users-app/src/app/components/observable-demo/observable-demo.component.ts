@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { combineLatest, forkJoin, from, fromEvent, interval, of, throwError, timer } from 'rxjs';
-import { auditTime, catchError, concatMap, debounceTime, endWith, exhaustMap, filter, map, mapTo, mergeAll, mergeMap, mergeMapTo, retryWhen, sampleTime, scan, startWith, switchAll, switchMap, take, takeUntil, takeWhile, throttleTime } from 'rxjs/operators';
+import { AsyncSubject, BehaviorSubject, combineLatest, forkJoin, from, fromEvent, interval, of, ReplaySubject, Subject, throwError, timer } from 'rxjs';
+import { auditTime, catchError, concatMap, debounceTime, endWith, exhaustMap, filter, map, mapTo, mergeAll, mergeMap, mergeMapTo, multicast, refCount, retryWhen, sampleTime, scan, share, shareReplay, startWith, switchAll, switchMap, take, takeUntil, takeWhile, tap, throttleTime } from 'rxjs/operators';
 import { ajax } from 'rxjs/ajax'
 
 @Component({
@@ -29,7 +29,7 @@ export class ObservableDemoComponent implements OnInit {
         return attemps.pipe(
           mergeMap((err, i) => {
             const numberOfAttemps = i + 1;
-            if(numberOfAttemps > totalAttempts){
+            if(numberOfAttemps > totalAttempts || [404,500].find(e=> e ===err.status)){
               console.log("Giving up!")
               return throwError(err)
             }
@@ -43,17 +43,86 @@ export class ObservableDemoComponent implements OnInit {
 
   ngOnInit(){
 
-    // Exponential Backoff
-    const click$ = fromEvent(document, "click")
-    click$.pipe(
-      mergeMapTo(
-        throwError({status : 400, message : "SERVER ERROR"}).pipe(
-          this.customRetry({totalAttempts : 4, scalingDuration : 2000}),
-          catchError(err => of(err.message))
-        )
 
-        )
-    ).subscribe(console.log)
+    const click$ = fromEvent(this.btnElement.nativeElement, "click")
+    const ajx = ajax("https://api.github.com/users/synergy2411")
+    const sharedReplay$ = click$.pipe(
+      mergeMapTo(ajx),
+      shareReplay(1)
+    )
+
+    const subOne = sharedReplay$.subscribe(console.log)
+
+    setTimeout(() => {
+      const subTwo = sharedReplay$.subscribe(console.log)
+    }, 3000)
+
+    // const interval$ = interval(2000).pipe(
+    //   take(5),
+    //   tap(val => {console.log("New Interval - ", val)})
+    //   )
+
+    //   const sharedInterval$ = interval$.pipe(
+    //     share(),
+    //     // shareReplay(2)
+    //   )
+    //   sharedInterval$.subscribe(console.log)
+
+    //   setTimeout(()=>{
+    //     sharedInterval$.subscribe(console.log)
+    //   }, 3000)
+
+
+
+
+    // Subject - both observable and observer - (pipe, subscribe, next, error, complete)
+
+    // Async Subject
+    // const subject = new AsyncSubject();
+    // subject.subscribe(console.log)
+
+    // subject.next("Hello")
+    // subject.next("World")
+    // subject.next("Goodbye")
+
+    // subject.complete()
+
+    // REPLAY SUBJECT
+    // const subject = new ReplaySubject(2);
+    // subject.next("Hello 1")
+    // subject.next("Hello 2")
+    // subject.next("Hello 3")
+    // subject.subscribe(console.log)
+    // subject.next("World")
+    // subject.subscribe(console.log)
+    // subject.next("Goodbye")
+
+    // const sub = new Subject()
+    // const sub = new BehaviorSubject("Hello")
+    // // Future subscription will receive last value
+    // // sub.next()
+    // const subOne = sub.subscribe(console.log)
+    // // sub.next("World")
+    // const subTwo = sub.subscribe(console.log)
+    // sub.next("GoodBye")
+
+    // setTimeout(() => {
+    //   console.log("Subscribing!")
+    //   const subThree = sub.subscribe(console.log)
+    // }, 3000)
+
+
+    // Exponential Backoff
+    // const click$ = fromEvent(document, "click")
+    // click$.pipe(
+    //   mergeMapTo(
+    //     throwError({status : 400, message : "SERVER ERROR"}).pipe(
+    //       this.customRetry({totalAttempts : 4, scalingDuration : 2000}),
+    //       catchError(err => of(err.message))
+    //     )
+
+    //     )
+    // ).subscribe(console.log)
 
     // combineLatest
     // const interval1$ = interval(1000).pipe(take(4)) // [0,1,2,3]
