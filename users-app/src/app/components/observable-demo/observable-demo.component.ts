@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { AsyncSubject, BehaviorSubject, combineLatest, forkJoin, from, fromEvent, interval, of, ReplaySubject, Subject, throwError, timer } from 'rxjs';
+import { AsyncSubject, BehaviorSubject, combineLatest, forkJoin, from, fromEvent, interval, of, ReplaySubject, Subject, Subscription, throwError, timer } from 'rxjs';
 import { auditTime, catchError, concatMap, debounceTime, endWith, exhaustMap, filter, map, mapTo, mergeAll, mergeMap, mergeMapTo, multicast, refCount, retryWhen, sampleTime, scan, share, shareReplay, startWith, switchAll, switchMap, take, takeUntil, takeWhile, tap, throttleTime } from 'rxjs/operators';
 import { ajax } from 'rxjs/ajax'
 
@@ -41,21 +41,31 @@ export class ObservableDemoComponent implements OnInit {
     )}
   }
 
+  ngOnDestroy(){
+    this.subOne.unsubscribe()
+    this.subTwo.unsubscribe()
+  }
+
+  subOne : Subscription;
+  subTwo :Subscription;
+
   ngOnInit(){
 
 
-    const click$ = fromEvent(this.btnElement.nativeElement, "click")
-    const ajx = ajax("https://api.github.com/users/synergy2411")
-    const sharedReplay$ = click$.pipe(
-      mergeMapTo(ajx),
-      shareReplay(1)
-    )
+    // const click$ = fromEvent(this.btnElement.nativeElement, "click")
+    // const ajx = ajax("https://api.github.com/users/synergy2411")
+    // const sharedReplay$ = click$.pipe(
+    //   mergeMapTo(ajx),
+    //   shareReplay(1)
+    // )
 
-    const subOne = sharedReplay$.subscribe(console.log)
+    //  this.subOne = sharedReplay$.subscribe(console.log)
 
-    setTimeout(() => {
-      const subTwo = sharedReplay$.subscribe(console.log)
-    }, 3000)
+    // setTimeout(() => {
+    //   this.subTwo = sharedReplay$.subscribe(console.log)
+    // }, 3000)
+
+
 
     // const interval$ = interval(2000).pipe(
     //   take(5),
@@ -63,13 +73,16 @@ export class ObservableDemoComponent implements OnInit {
     //   )
 
     //   const sharedInterval$ = interval$.pipe(
+
     //     share(),
     //     // shareReplay(2)
     //   )
+
     //   sharedInterval$.subscribe(console.log)
 
     //   setTimeout(()=>{
     //     sharedInterval$.subscribe(console.log)
+
     //   }, 3000)
 
 

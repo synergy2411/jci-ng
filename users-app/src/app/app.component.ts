@@ -11,6 +11,11 @@ export class AppComponent {
 
   constructor(private dataService : DataService){}
 
+  clicked(){
+    this.dataService.getDataFromAPI()
+      .subscribe(console.log)
+  }
+
   increment(){
     this.dataService.counter++;
   }

@@ -20,4 +20,9 @@ export class DataService {
       .pipe(map(response => <User[]>response['userdata']))
   }
 
+  getDataFromAPI(){
+    return this.httpClient.get("https://api.github.com/users/synergy2411")
+  }
+
+
 }

@@ -1,13 +1,21 @@
+<app-header></app-header>
 <div class="container">
-  <h3>Counter in App : {{ getCounter() }}</h3>
+
+  <button class="btn btn-primary" (click)="clicked()">Get API Data</button>
+
+  <router-outlet></router-outlet>
+
+
+
+  <!-- <h3>Counter in App : {{ getCounter() }}</h3>
   <button class="btn btn-default" (click)="increment()">
     Increase
-  </button>
+  </button> -->
 
   <!-- <app-pipe-demo></app-pipe-demo> -->
 
   <!-- <app-users></app-users> -->
 
-  <app-observable-demo></app-observable-demo>
+  <!-- <app-observable-demo></app-observable-demo> -->
 
 </div>
