@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { from, fromEvent } from 'rxjs';
-import { auditTime, debounceTime, filter, map, mergeAll, sampleTime, scan, switchAll, switchMap, takeUntil, takeWhile, throttleTime } from 'rxjs/operators';
+import { combineLatest, forkJoin, from, fromEvent, interval, of, throwError, timer } from 'rxjs';
+import { auditTime, catchError, concatMap, debounceTime, endWith, exhaustMap, filter, map, mapTo, mergeAll, mergeMap, mergeMapTo, retryWhen, sampleTime, scan, startWith, switchAll, switchMap, take, takeUntil, takeWhile, throttleTime } from 'rxjs/operators';
 import { ajax } from 'rxjs/ajax'
 
 @Component({
@@ -14,6 +14,7 @@ export class ObservableDemoComponent implements OnInit {
 
   username = new FormControl('');
   theForm : FormGroup;
+  urls : [{name : string}]= [{name: ""}]
 
   constructor(private fb:  FormBuilder){
     this.theForm  = this.fb.group({
@@ -21,16 +22,75 @@ export class ObservableDemoComponent implements OnInit {
     })
   }
 
+  customRetry({totalAttempts = 3, scalingDuration = 1000}={}){
+    return function(source){
+      return source.pipe(
+        retryWhen(attemps => {
+        return attemps.pipe(
+          mergeMap((err, i) => {
+            const numberOfAttemps = i + 1;
+            if(numberOfAttemps > totalAttempts){
+              console.log("Giving up!")
+              return throwError(err)
+            }
+            console.log(`Attempt ${numberOfAttemps} : retrying in ${numberOfAttemps*scalingDuration}ms`)
+            return timer(scalingDuration * i)
+          })
+        )
+      })
+    )}
+  }
+
   ngOnInit(){
 
-    // switchMap
-    this.username.valueChanges.pipe(
-      debounceTime(2000),
-      filter(val => val ? true : false),
-      switchMap(val => {
-        return ajax.getJSON(`https://api.github.com/users/${val}/repos`)
-      })
+    // Exponential Backoff
+    const click$ = fromEvent(document, "click")
+    click$.pipe(
+      mergeMapTo(
+        throwError({status : 400, message : "SERVER ERROR"}).pipe(
+          this.customRetry({totalAttempts : 4, scalingDuration : 2000}),
+          catchError(err => of(err.message))
+        )
+
+        )
     ).subscribe(console.log)
+
+    // combineLatest
+    // const interval1$ = interval(1000).pipe(take(4)) // [0,1,2,3]
+    // const interval2$ = interval(2000).pipe(take(4)) // [0,1,2,3]
+    // // combineLatest([interval1$, interval2$])
+    // forkJoin({interval1$, interval2$})    // {}
+    //   .subscribe(console.log)
+
+      // [00], [11]
+
+    // startWith | endWith
+    // interval(1000).pipe(
+    //   mapTo(-1),
+    //   scan((acc, curr)=>acc+curr, 4),
+    //   takeWhile(val=>val!==0),
+    //   startWith("Ready...."),
+    //   endWith("Mission completed!")
+    // ).subscribe(console.log)
+
+    // typeahead suggestion
+    // this.username.valueChanges.pipe(
+    //   debounceTime(2000),
+    //   switchMap(serchTerm => {
+    //     return ajax.getJSON(`https://api.github.com/users/${serchTerm}/repos`)
+    //   })
+    // ).subscribe((urls : [{name}]) => this.urls = urls)
+    // ).subscribe(console.log)
+
+//  MergeMap
+    // const source = fromEvent(this.btnElement.nativeElement, "click")
+    // const interval$ = interval(1000).pipe(take(4))
+    // source.pipe(
+    //   // switchMap(val => interval$)
+    //   // concatMap(val => interval$)
+    //   exhaustMap(val => interval$)
+    // ).subscribe(console.log)
+
 
     // flattening
     // this.username.valueChanges.pipe(

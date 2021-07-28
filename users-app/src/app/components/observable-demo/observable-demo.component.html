@@ -2,3 +2,11 @@
   <input type="text" formControlName="username" name="username">
   <button #btn class="btn btn-primary">Stop</button>
 </form>
+
+
+<hr>
+<ul>
+  <li *ngFor="let url of urls">
+    {{ url.name }}
+  </li>
+</ul>
