@@ -1,4 +1,3 @@
-import { Action } from "@ngrx/store";
 import * as fromActions from '../actions/counter.action';
 
 const initialState = {
@@ -14,14 +13,12 @@ export function counterReducer(state = initialState, action: fromActions.Counter
       return {...state, counter : state.counter - 1}
     }
     case fromActions.ADD_COUNTER:{
-      console.log("ACTION ", action)
       return {
         ...state,
         counter : state.counter + action.payload
       }
     }
     case fromActions.SUBTRACT_COUNTER:{
-      console.log("SUBTRACT ACTION ", action)
       return {
         ...state,
         counter : state.counter - action.payload

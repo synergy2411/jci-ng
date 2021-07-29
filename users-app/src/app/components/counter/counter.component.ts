@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromCounterActions from '../../store/actions/counter.action';
 import * as fromResultActions from "../../store/actions/result.action";
-
+import * as fromLoginActions from '../../store/actions/auth.actions';
 @Component({
   selector: 'app-counter',
   templateUrl: './counter.component.html',
@@ -39,6 +39,10 @@ export class CounterComponent implements OnInit {
 
   onStoreResult(){
     this.store.dispatch(new fromResultActions.StoreResult(this.counter))
+  }
+
+  onLogin(){
+    this.store.dispatch(new fromLoginActions.LoginStart("eve.holt@reqres.in", "cityslicka"))
   }
 }
 

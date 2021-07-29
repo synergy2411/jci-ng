@@ -15,7 +15,7 @@ export class ResponseInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(tap(val => {
-      console.log("Interceptor Value : ", val)
+      // console.log("Interceptor Value : ", val)
     }));
   }
 }

@@ -18,7 +18,7 @@ export class HighlightDirective {
   }
 
   constructor(private elRef : ElementRef) {
-    console.log(this.elRef.nativeElement);
+    // console.log(this.elRef.nativeElement);
   }
 
 }

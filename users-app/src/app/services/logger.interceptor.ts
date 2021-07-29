@@ -6,8 +6,8 @@ import { Observable } from "rxjs";
 export class LoggerInterceptor implements HttpInterceptor{
 
   intercept(req : HttpRequest<any>, next: HttpHandler ) : Observable<HttpEvent<any>>{
-    console.log("Logger interceptor working....")
-    console.log("METHOD :", req.method)
+    // console.log("Logger interceptor working....")
+    // console.log("METHOD :", req.method)
     const clonedReq = req.clone({
       // params : new HttpParams().set("auth", "")
     })

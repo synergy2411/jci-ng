@@ -1,4 +1,3 @@
-import { Action } from "@ngrx/store";
 import * as fromActions from '../actions/result.action';
 
 const initialState = {
