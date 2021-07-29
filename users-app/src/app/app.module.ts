@@ -17,17 +17,21 @@ import { RouterModule } from '@angular/router';
 import { APP_ROUTES } from './app.routes';
 import { LoggerInterceptor } from './services/logger.interceptor';
 import { ResponseInterceptor } from './services/response.interceptor';
-
+import { CounterComponent } from './components/counter/counter.component';
+import { StoreModule } from '@ngrx/store';
+import { counterReducer } from './store/reducers/counter.reducer';
+import { resultReducer } from './store/reducers/result.reducer';
 @NgModule({
   declarations: [         // Components, Directives, Pipes
-    AppComponent, UsersComponent, UserImgComponent, UserInfoComponent, HighlightDirective, UntilDirective, PipeDemoComponent, FilterPipe, ObservableDemoComponent, HeaderComponent
+    AppComponent, UsersComponent, UserImgComponent, UserInfoComponent, HighlightDirective, UntilDirective, PipeDemoComponent, FilterPipe, ObservableDemoComponent, HeaderComponent, CounterComponent
   ],
   imports: [              // Modules - built-in and Custom
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    RouterModule.forRoot(APP_ROUTES)
+    RouterModule.forRoot(APP_ROUTES),
+    StoreModule.forRoot({ctr : counterReducer, res : resultReducer})
   ],
   providers: [{
     provide : HTTP_INTERCEPTORS,

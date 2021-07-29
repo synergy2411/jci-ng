@@ -1,0 +1,17 @@
+<h2>Counter Value : {{ counter }}</h2>
+
+<div class="btn-group">
+  <button class="btn btn-primary" (click) ="onIncrement()">Increase</button>
+  <button class="btn btn-warning" (click) ="onDecrement()">Decrease</button>
+  <button class="btn btn-success" (click) ="onAdd(5)">Add 5</button>
+  <button class="btn btn-danger" (click) ="onSubtract(8)">Subtract 8</button>
+</div>
+
+<button class="btn btn-info" (click)="onStoreResult()">Store Result</button>
+
+<hr>
+<ul class="list-group">
+  <li *ngFor="let res of resultColl" class="list-group-item">
+    {{res}}
+  </li>
+</ul>
