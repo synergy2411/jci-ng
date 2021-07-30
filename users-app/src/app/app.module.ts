@@ -25,9 +25,13 @@ import { counterReducer } from './store/reducers/counter.reducer';
 import { resultReducer } from './store/reducers/result.reducer';
 import { LoginEffect } from './store/effects/login.effects';
 import { loginReducer } from './store/reducers/login.reducer';
+import { TheParentComponent } from './components/the-parent/the-parent.component';
+import { TheChildComponent } from './components/the-child/the-child.component';
+import { ChatComponent } from './components/chat/chat.component';
+import { SecurityDemoComponent } from './components/security-demo/security-demo.component';
 @NgModule({
   declarations: [         // Components, Directives, Pipes
-    AppComponent, UsersComponent, UserImgComponent, UserInfoComponent, HighlightDirective, UntilDirective, PipeDemoComponent, FilterPipe, ObservableDemoComponent, HeaderComponent, CounterComponent
+    AppComponent, UsersComponent, UserImgComponent, UserInfoComponent, HighlightDirective, UntilDirective, PipeDemoComponent, FilterPipe, ObservableDemoComponent, HeaderComponent, CounterComponent, TheParentComponent, TheChildComponent, ChatComponent, SecurityDemoComponent
   ],
   imports: [              // Modules - built-in and Custom
     BrowserModule,

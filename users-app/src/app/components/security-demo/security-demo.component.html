@@ -1,0 +1,25 @@
+<p>security-demo works!</p>
+
+<button class="btn btn-dark" (click) = "onChange()">Change the collection</button>
+
+<ul>
+  <li *ngFor="let todo of todoColl; trackBy:identify">
+    {{todo.label}}
+  </li>
+</ul>
+
+
+<!-- Property Binding -->
+<h3>Property binding</h3>
+<div [innerHTML] = "htmlSnippets"></div>
+<div [innerHTML] = "hello"></div>
+
+<!-- String Interpolation -->
+<h3>Interpolation</h3>
+
+<p>{{htmlSnippets}}</p>
+<p>{{hello}}</p>
+<hr>
+
+<a [href]="dangerUrl">Danger URL</a> <br>
+<a [href]="safeUrl">Safe URL</a>
