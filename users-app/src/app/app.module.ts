@@ -16,7 +16,7 @@ import { PipeDemoComponent } from './components/pipe-demo/pipe-demo.component';
 import { FilterPipe } from './pipes/filter.pipe';
 import { ObservableDemoComponent } from './components/observable-demo/observable-demo.component';
 import { HeaderComponent } from './components/header/header.component';
-import { RouterModule } from '@angular/router';
+import { PreloadAllModules, RouterModule } from '@angular/router';
 import { APP_ROUTES } from './app.routes';
 import { LoggerInterceptor } from './services/logger.interceptor';
 import { ResponseInterceptor } from './services/response.interceptor';
